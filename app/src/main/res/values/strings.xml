@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BakingApp</string>
+    <string name="recipe_item_image_description">Recipe Image</string>
+    <string name="main_activity_title">Baking Time</string>
+    <string name="ingredients_label">Ingredients</string>
+    <string name="steps_label">Steps</string>
+</resources>
