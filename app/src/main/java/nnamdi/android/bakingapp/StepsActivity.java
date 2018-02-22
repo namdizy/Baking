@@ -31,6 +31,7 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
 
     private final String STEPS_EXTRA = "step";
     private final String RECIPE_PREFERENCE_KEY = "recipe_key";
+    private final String STEPS_SIZE_KEY = "step_size";
 
 
     @Override
@@ -53,7 +54,12 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
 
             editor.putString(RECIPE_PREFERENCE_KEY, json);
             editor.apply();
+
+            editor.putInt(STEPS_SIZE_KEY, recipe.getSteps().size());
+            editor.apply();
         }
+
+
 
         String recipeName = recipe.getName();
         setTitle(recipeName);
