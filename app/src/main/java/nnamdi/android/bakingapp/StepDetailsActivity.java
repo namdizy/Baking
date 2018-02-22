@@ -1,10 +1,14 @@
 package nnamdi.android.bakingapp;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -38,6 +42,7 @@ public class StepDetailsActivity extends AppCompatActivity {
     @BindView(R.id.tv_steps_full_description) TextView mDescriptionTV;
 
     private SimpleExoPlayer mExoplayer;
+    private Boolean IS_PLAYER_VISIBLE ;
 
 
     private final String STEPS_EXTRA = "step";
@@ -53,9 +58,20 @@ public class StepDetailsActivity extends AppCompatActivity {
 
         setTitle(step.getShortDescription());
 
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mDescriptionTV.getLayoutParams();
+
         mDescriptionTV.setText(step.getDescription());
 
-        initializePlayer(Uri.parse(step.getVideoURL()));
+        if(step.getVideoURL().isEmpty()){
+            mPlayerView.setVisibility(View.INVISIBLE);
+            layoutParams.setMargins(0, 0, 0, 0);
+            mDescriptionTV.setLayoutParams(layoutParams);
+            IS_PLAYER_VISIBLE = false;
+
+        }else{
+            initializePlayer(Uri.parse(step.getVideoURL()));
+            IS_PLAYER_VISIBLE = true;
+        }
 
     }
 
@@ -93,7 +109,9 @@ public class StepDetailsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        releasePlayer();
 
+        if(IS_PLAYER_VISIBLE){
+            releasePlayer();
+        }
     }
 }

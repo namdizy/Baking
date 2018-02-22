@@ -48,9 +48,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         holder.mIngredientMeasuerTV.setText(ingredient.getQuantity()+ ""+ ingredient.getMeasure() );
         holder.mIngredientTitleTV.setText(ingredient.getIngredient());
 
-        if (position % 2 == 1) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryLight));
-        }
+//        if (position % 2 == 1) {
+//            holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryLight));
+//        }
     }
 
     @Override
