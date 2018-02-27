@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="nnamdi.android.bakingapp.StepsFragment">
+
+    <TextView
+        android:id="@+id/tv_steps_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/steps_label"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/recipe_card_title_font"
+        android:padding="@dimen/text_padding"
+        android:textColor="@color/colorPrimaryTextLight"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_steps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

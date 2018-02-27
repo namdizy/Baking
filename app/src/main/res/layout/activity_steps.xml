@@ -1,65 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/steps_activity_padding">
+    <fragment
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:id="@+id/ingredients_fragment"></fragment>
 
-        <TextView
-            android:id="@+id/tv_ingredient_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
-            android:text="@string/ingredients_label"
-            android:textSize="@dimen/recipe_card_title_font"
-            android:padding="@dimen/text_padding"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/colorPrimaryTextLight"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_ingredients"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_ingredient_label"></android.support.v7.widget.RecyclerView>
-
-        <TextView
-            android:id="@+id/tv_steps_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/steps_label"
-            android:gravity="center_horizontal"
-            android:textSize="@dimen/recipe_card_title_font"
-            android:padding="@dimen/text_padding"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycler_view_ingredients"
-            android:textColor="@color/colorPrimaryTextLight"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_steps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_steps_label"></android.support.v7.widget.RecyclerView>
-
-
-
-    </android.support.constraint.ConstraintLayout>
-
+    <fragment
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:id="@+id/steps_fragment"></fragment>
 </ScrollView>

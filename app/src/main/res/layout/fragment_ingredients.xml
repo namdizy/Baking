@@ -1,0 +1,27 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    tools:context="nnamdi.android.bakingapp.IngredientsFragment">
+
+
+    <TextView android:id="@+id/tv_ingredient_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center_horizontal"
+        android:text="@string/ingredients_label"
+        android:textSize="@dimen/recipe_card_title_font"
+        android:padding="@dimen/text_padding"
+        android:textColor="@color/colorPrimaryTextLight"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+</LinearLayout>
+
