@@ -3,15 +3,25 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <fragment
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:id="@+id/ingredients_fragment"></fragment>
+        android:orientation="vertical"
+        android:padding="@dimen/ingredients_padding">
+        <FrameLayout
+            android:id="@+id/ingredients_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            />
 
-    <fragment
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:id="@+id/steps_fragment"></fragment>
+        <FrameLayout
+            android:id="@+id/steps_container"
+            android:scaleType="centerInside"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+
 </ScrollView>

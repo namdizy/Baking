@@ -16,13 +16,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:id="@+id/ingredients_fragment"></fragment>
+            android:id="@+id/ingredients_fragment"
+            android:name="nnamdi.android.bakingapp.IngredientsFragment"></fragment>
 
         <fragment
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:id="@+id/steps_fragment"></fragment>
+            android:id="@+id/steps_fragment"
+            android:name="nnamdi.android.bakingapp.StepsFragment"></fragment>
 
     </ScrollView>
     <View
@@ -30,10 +32,10 @@
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray" />
 
-    <fragment
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:id="@+id/details_fragment"></fragment>
+        android:id="@+id/details_container"></FrameLayout>
 
 </LinearLayout>

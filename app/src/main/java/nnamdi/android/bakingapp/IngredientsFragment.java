@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,15 +39,7 @@ public class IngredientsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param ingredients ArrayList of Ingredients..
-     * @return A new instance of fragment IngredientsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static IngredientsFragment newInstance(ArrayList<Ingredient> ingredients) {
+    public IngredientsFragment newInstance(ArrayList<Ingredient> ingredients) {
         IngredientsFragment fragment = new IngredientsFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(INGREDIENTS_LIST, ingredients);
@@ -65,13 +58,20 @@ public class IngredientsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragme
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
         ButterKnife.bind(this, view);
 
+        if(mIngredientsList != null){
+            ingredientLayoutManger = new LinearLayoutManager(getContext());
+            ingredientRecyclerView.setLayoutManager(ingredientLayoutManger);
+            ingredientRecyclerView.setHasFixedSize(true);
+            ingredientAdapter = new IngredientsAdapter();
+            ingredientRecyclerView.setAdapter(ingredientAdapter);
+            ingredientAdapter.setIngredientsData(mIngredientsList);
+        }
+
         return view;
-
-
     }
 
 

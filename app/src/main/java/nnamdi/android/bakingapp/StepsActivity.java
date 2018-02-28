@@ -2,38 +2,23 @@ package nnamdi.android.bakingapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.widget.Adapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import nnamdi.android.bakingapp.models.Recipe;
 import nnamdi.android.bakingapp.models.Step;
 import nnamdi.android.bakingapp.utils.LoadRecipeData;
 
-public class StepsActivity extends AppCompatActivity implements StepsAdapter.StepsAdapterOnClickHandler {
 
-    private IngredientsAdapter ingredientAdapter;
-    @BindView(R.id.recycler_view_ingredients) RecyclerView  ingredientRecyclerView;
-    private RecyclerView.LayoutManager ingredientLayoutManger;
-
-    private StepsAdapter stepsAdapter;
-    @BindView(R.id.recycler_view_steps) RecyclerView stepsRecyclerView;
-    private RecyclerView.LayoutManager stepsLayoutManager;
+public class StepsActivity extends AppCompatActivity implements StepsFragment.OnStepsFragmentInteractionListener {
 
     private final String STEPS_EXTRA = "step";
     private final String RECIPE_PREFERENCE_KEY = "recipe_key";
     private final String STEPS_SIZE_KEY = "step_size";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,34 +45,34 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
             editor.apply();
         }
 
-
-
         String recipeName = recipe.getName();
         setTitle(recipeName);
 
-        ingredientLayoutManger = new LinearLayoutManager(this);
-        ingredientRecyclerView.setLayoutManager(ingredientLayoutManger);
-        ingredientRecyclerView.setHasFixedSize(true);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        ingredientAdapter = new IngredientsAdapter(this);
-        ingredientRecyclerView.setAdapter(ingredientAdapter);
-        ingredientAdapter.setIngredientsData(recipe.getIngredients());
+        IngredientsFragment ingredientsFragment = new IngredientsFragment().newInstance(recipe.getIngredients());
+        fragmentTransaction
+                .add(R.id.ingredients_container, ingredientsFragment);
 
-        stepsLayoutManager = new LinearLayoutManager(this);
-        stepsRecyclerView.setLayoutManager(stepsLayoutManager);
-        stepsRecyclerView.setHasFixedSize(true);
+        StepsFragment stepsFragment = new StepsFragment().newInstance(recipe.getSteps());
 
-        stepsAdapter = new StepsAdapter(this);
-        stepsRecyclerView.setAdapter(stepsAdapter);
-        stepsAdapter.setStepsData(recipe.getSteps());
+        fragmentTransaction
+                .add(R.id.steps_container, stepsFragment)
+                .commit();
+
+
+        if(findViewById(R.id.details_container) != null){
+
+
+        }
+
+
     }
 
     @Override
-    public void click(Step step) {
+    public void onStepFragmentInteraction(Step step) {
         Intent intent = new Intent(this, StepDetailsActivity.class);
         intent.putExtra(STEPS_EXTRA, step);
         this.startActivity(intent);
-
     }
-
 }

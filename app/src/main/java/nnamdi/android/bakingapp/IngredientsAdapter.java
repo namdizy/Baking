@@ -24,7 +24,6 @@ import nnamdi.android.bakingapp.models.Ingredient;
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder> {
 
     private ArrayList<Ingredient> mIngredients;
-    private Context mContext;
 
     @Override
     public IngredientViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -37,8 +36,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         return new IngredientViewHolder(view);
     }
 
-    public IngredientsAdapter(Context context){
-        mContext = context;
+    public IngredientsAdapter(){
     }
 
     @Override
