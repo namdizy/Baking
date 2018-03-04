@@ -3,60 +3,74 @@ package nnamdi.android.bakingapp;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import nnamdi.android.bakingapp.models.Step;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DetailsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DetailsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @BindView(R.id.playerView) SimpleExoPlayerView mPlayerView;
+    @BindView(R.id.tv_steps_full_description) TextView mDescriptionTV;
 
-    private OnFragmentInteractionListener mListener;
+    private static final String STEP_ITEM = "step_item";
+    private Boolean IS_PLAYER_VISIBLE ;
+    private SimpleExoPlayer mExoPlayer;
+    private Context mContext;
 
-    public DetailsFragment() {
-        // Required empty public constructor
+    private Step mStepItem;
+
+    public DetailsFragment(){
+
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param step Step .
      * @return A new instance of fragment DetailsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static DetailsFragment newInstance(String param1, String param2) {
+    public static DetailsFragment newInstance(Step step) {
         DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(STEP_ITEM, step);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setContext(Context context){
+        mContext = context;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mStepItem = getArguments().getParcelable(STEP_ITEM);
         }
     }
 
@@ -64,53 +78,61 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_details, container, false);
+        View view =  inflater.inflate(R.layout.fragment_details, container, false);
+        ButterKnife.bind(this, view);
+
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mDescriptionTV.getLayoutParams();
+
+        mDescriptionTV.setText(mStepItem.getDescription());
+        if(mStepItem.getVideoURL().isEmpty()){
+            mPlayerView.setVisibility(View.INVISIBLE);
+            layoutParams.setMargins(0, 0, 0, 0);
+            mDescriptionTV.setLayoutParams(layoutParams);
+            IS_PLAYER_VISIBLE = false;
+
+        }else{
+            initializePlayer(Uri.parse(mStepItem.getVideoURL()));
+            IS_PLAYER_VISIBLE = true;
+        }
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+
+    private void releasePlayer() {
+        mExoPlayer.stop();
+        mExoPlayer.release();
+        mExoPlayer = null;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(IS_PLAYER_VISIBLE){
+            releasePlayer();
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+    public void initializePlayer(Uri mediaUri){
+        if(mExoPlayer == null){
+            Handler mainHandler = new Handler();
+            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            TrackSelection.Factory videoTrackSelectionFactory =
+                    new AdaptiveTrackSelection.Factory(bandwidthMeter);
+            TrackSelector trackSelector =
+                    new DefaultTrackSelector(videoTrackSelectionFactory);
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+            mExoPlayer =
+                    ExoPlayerFactory.newSimpleInstance(mContext, trackSelector);
+            mPlayerView.setPlayer(mExoPlayer);
 
-    public void onBackClick(View v){
+            DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext,
+                    Util.getUserAgent(mContext, "BakingApp"), defaultBandwidthMeter);
+            MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaUri);
 
-    }
-
-    public void onForwardClick(View v){
-
+            mExoPlayer.prepare(videoSource);
+            mExoPlayer.setPlayWhenReady(true);
+        }
     }
 }

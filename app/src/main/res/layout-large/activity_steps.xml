@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:padding="@dimen/steps_activity_padding"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
@@ -12,19 +13,34 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <fragment
-            android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:id="@+id/ingredients_fragment"
-            android:name="nnamdi.android.bakingapp.IngredientsFragment"></fragment>
+            android:padding="@dimen/ingredients_padding">
+            <FrameLayout
+                android:id="@+id/ingredients_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
 
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:id="@+id/steps_fragment"
-            android:name="nnamdi.android.bakingapp.StepsFragment"></fragment>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/steps_container"
+                />
+
+            <FrameLayout
+                android:id="@+id/steps_container"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ingredients_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                />
+        </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
     <View

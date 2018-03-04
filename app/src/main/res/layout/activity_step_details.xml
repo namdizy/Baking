@@ -1,12 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="nnamdi.android.bakingapp.StepDetailsActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/details_container"
+        android:layout_weight="5"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        >
+
+        <ImageButton
+            android:id="@+id/btn_step_details_back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_arrow_back_black"
+            android:background="@null"
+            android:onClick="onBackClick"
+            android:layout_gravity="center_vertical"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_gravity="center_vertical"/>
+        <ImageButton
+            android:id="@+id/btn_step_details_forward"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_arrow_forward_black"
+            android:background="@null"
+            android:onClick="onForwardClick"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
 
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

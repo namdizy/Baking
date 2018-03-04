@@ -7,33 +7,11 @@ import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -45,17 +23,13 @@ import nnamdi.android.bakingapp.utils.LoadRecipeData;
 
 public class StepDetailsActivity extends AppCompatActivity {
 
-    @BindView(R.id.playerView) SimpleExoPlayerView mPlayerView;
-    @BindView(R.id.tv_steps_full_description) TextView mDescriptionTV;
+
     @BindView(R.id.btn_step_details_back) ImageButton mBackBtn;
     @BindView(R.id.btn_step_details_forward) ImageButton mForwardBtn;
 
-    private SimpleExoPlayer mExoPlayer;
-    private Boolean IS_PLAYER_VISIBLE ;
     private Step mStep;
     private SharedPreferences pref;
     private ArrayList<Step> stepsArray;
-
 
     private final String STEPS_EXTRA = "step";
     private final String RECIPE_PREFERENCE_KEY = "recipe_key";
@@ -71,24 +45,16 @@ public class StepDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mStep = intent.getParcelableExtra(STEPS_EXTRA);
-
         setTitle(mStep.getShortDescription());
 
-        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mDescriptionTV.getLayoutParams();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        mDescriptionTV.setText(mStep.getDescription());
+        DetailsFragment detailsFragment = new DetailsFragment().newInstance(mStep);
+        detailsFragment.setContext(this);
+        fragmentTransaction
+                .add(R.id.details_container, detailsFragment)
+                .commit();
 
-
-        if(mStep.getVideoURL().isEmpty()){
-            mPlayerView.setVisibility(View.INVISIBLE);
-            layoutParams.setMargins(0, 0, 0, 0);
-            mDescriptionTV.setLayoutParams(layoutParams);
-            IS_PLAYER_VISIBLE = false;
-
-        }else{
-            initializePlayer(Uri.parse(mStep.getVideoURL()));
-            IS_PLAYER_VISIBLE = true;
-        }
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         int stepsListSize  =  pref.getInt(STEPS_SIZE_KEY, 0);
@@ -107,46 +73,6 @@ public class StepDetailsActivity extends AppCompatActivity {
 
     }
 
-    public void initializePlayer(Uri mediaUri){
-        if(mExoPlayer == null){
-            Handler mainHandler = new Handler();
-            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-            TrackSelection.Factory videoTrackSelectionFactory =
-                    new AdaptiveTrackSelection.Factory(bandwidthMeter);
-            TrackSelector trackSelector =
-                    new DefaultTrackSelector(videoTrackSelectionFactory);
-
-            mExoPlayer =
-                    ExoPlayerFactory.newSimpleInstance(this, trackSelector);
-            mPlayerView.setPlayer(mExoPlayer);
-
-
-            DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
-            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-                    Util.getUserAgent(this, "BakingApp"), defaultBandwidthMeter);
-            MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(mediaUri);
-
-            mExoPlayer.prepare(videoSource);
-            mExoPlayer.setPlayWhenReady(true);
-        }
-    }
-
-    private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if(IS_PLAYER_VISIBLE){
-            releasePlayer();
-        }
-    }
-
     public void onForwardClick(View v){
         for(Step s: stepsArray){
             if(s.getId() == mStep.getId() +1){
@@ -155,8 +81,6 @@ public class StepDetailsActivity extends AppCompatActivity {
                 this.startActivity(intent);
             }
         }
-
-
     }
 
     public void onBackClick(View v){

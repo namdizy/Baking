@@ -20,6 +20,8 @@ public class StepsActivity extends AppCompatActivity implements StepsFragment.On
     private final String RECIPE_PREFERENCE_KEY = "recipe_key";
     private final String STEPS_SIZE_KEY = "step_size";
 
+    private boolean TABLET_LAYOUT = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +63,9 @@ public class StepsActivity extends AppCompatActivity implements StepsFragment.On
                 .commit();
 
 
+
         if(findViewById(R.id.details_container) != null){
-
-
+            TABLET_LAYOUT = true;
         }
 
 
@@ -71,8 +73,22 @@ public class StepsActivity extends AppCompatActivity implements StepsFragment.On
 
     @Override
     public void onStepFragmentInteraction(Step step) {
-        Intent intent = new Intent(this, StepDetailsActivity.class);
-        intent.putExtra(STEPS_EXTRA, step);
-        this.startActivity(intent);
+
+        if(TABLET_LAYOUT){
+
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+            DetailsFragment detailsFragment = new DetailsFragment().newInstance(step);
+            detailsFragment.setContext(this);
+            fragmentTransaction
+                    .replace(R.id.details_container, detailsFragment)
+                    .commit();
+
+        }else{
+            Intent intent = new Intent(this, StepDetailsActivity.class);
+            intent.putExtra(STEPS_EXTRA, step);
+            this.startActivity(intent);
+        }
+
     }
 }
