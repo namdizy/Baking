@@ -1,7 +1,5 @@
-package nnamdi.android.bakingapp;
+package nnamdi.android.bakingapp.ui.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,12 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nnamdi.android.bakingapp.R;
 import nnamdi.android.bakingapp.models.Ingredient;
+import nnamdi.android.bakingapp.ui.adapter.IngredientsAdapter;
 
 
 /**

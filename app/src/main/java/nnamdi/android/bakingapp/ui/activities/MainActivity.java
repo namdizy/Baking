@@ -1,4 +1,4 @@
-package nnamdi.android.bakingapp;
+package nnamdi.android.bakingapp.ui.activities;
 
 import android.app.LoaderManager;
 import android.content.Intent;
@@ -12,10 +12,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nnamdi.android.bakingapp.R;
+import nnamdi.android.bakingapp.ui.adapter.RecipeAdapter;
 import nnamdi.android.bakingapp.models.Recipe;
 import nnamdi.android.bakingapp.utils.FetchRecipeDataTask;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Recipe>>, RecipeAdapter.RecipeAdapterOnclickHandler{
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Recipe>>, RecipeAdapter.RecipeAdapterOnclickHandler {
 
     private RecyclerView.LayoutManager mLayoutManager;
 

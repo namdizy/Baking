@@ -1,6 +1,6 @@
-package nnamdi.android.bakingapp;
+package nnamdi.android.bakingapp.ui.fragments;
 
-import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -28,6 +29,7 @@ import com.google.android.exoplayer2.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nnamdi.android.bakingapp.R;
 import nnamdi.android.bakingapp.models.Step;
 
 
@@ -39,7 +41,6 @@ public class DetailsFragment extends Fragment {
     private static final String STEP_ITEM = "step_item";
     private Boolean IS_PLAYER_VISIBLE ;
     private SimpleExoPlayer mExoPlayer;
-    private Context mContext;
 
     private Step mStepItem;
 
@@ -62,14 +63,12 @@ public class DetailsFragment extends Fragment {
         return fragment;
     }
 
-    public void setContext(Context context){
-        mContext = context;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+
+        if( getArguments() != null){
             mStepItem = getArguments().getParcelable(STEP_ITEM);
         }
     }
@@ -77,7 +76,7 @@ public class DetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view =  inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
 
@@ -91,6 +90,14 @@ public class DetailsFragment extends Fragment {
             IS_PLAYER_VISIBLE = false;
 
         }else{
+            if (getResources().getConfiguration().orientation
+                    == Configuration.ORIENTATION_LANDSCAPE) {
+                mDescriptionTV.setVisibility(View.GONE);
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mPlayerView.getLayoutParams();
+                params.width=params.MATCH_PARENT;
+                params.height=params.MATCH_PARENT;
+                mPlayerView.setLayoutParams(params);
+            }
             initializePlayer(Uri.parse(mStepItem.getVideoURL()));
             IS_PLAYER_VISIBLE = true;
         }
@@ -114,7 +121,6 @@ public class DetailsFragment extends Fragment {
 
     public void initializePlayer(Uri mediaUri){
         if(mExoPlayer == null){
-            Handler mainHandler = new Handler();
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelection.Factory videoTrackSelectionFactory =
                     new AdaptiveTrackSelection.Factory(bandwidthMeter);
@@ -122,12 +128,12 @@ public class DetailsFragment extends Fragment {
                     new DefaultTrackSelector(videoTrackSelectionFactory);
 
             mExoPlayer =
-                    ExoPlayerFactory.newSimpleInstance(mContext, trackSelector);
+                    ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
             mPlayerView.setPlayer(mExoPlayer);
 
             DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
-            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext,
-                    Util.getUserAgent(mContext, "BakingApp"), defaultBandwidthMeter);
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
+                    Util.getUserAgent(getContext(), "BakingApp"), defaultBandwidthMeter);
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(mediaUri);
 
@@ -135,4 +141,12 @@ public class DetailsFragment extends Fragment {
             mExoPlayer.setPlayWhenReady(true);
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STEP_ITEM, mStepItem);
+    }
+
+
 }

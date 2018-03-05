@@ -1,16 +1,11 @@
 package nnamdi.android.bakingapp.utils;
 
-import android.content.AsyncTaskLoader;
-import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 import nnamdi.android.bakingapp.models.Ingredient;
@@ -18,92 +13,66 @@ import nnamdi.android.bakingapp.models.Recipe;
 import nnamdi.android.bakingapp.models.Step;
 
 /**
- * Created by Nnamdi on 2/6/2018.
+ * Created by Nnamdi on 2/18/2018.
  */
 
-public class FetchRecipeDataTask extends AsyncTaskLoader<ArrayList<Recipe>> {
+public class LoadRecipeJsonUtils {
+    private static final String TAG = "LoadRecipeJsonUtils";
 
-    private Context mContext;
-    private ArrayList<Recipe> mRecipe;
+    public Recipe loadRecipeFromString(String jsonString){
 
-    private final String TAG = getClass().getName();
-
-    public FetchRecipeDataTask(Context context){
-        super(context);
-
-        mContext = context;
-    }
-
-    @Override
-    protected void onStartLoading() {
-        if(mRecipe != null){
-            deliverResult(mRecipe);
-        }
-        else
-        {
-            forceLoad();
-        }
-        super.onStartLoading();
-    }
-
-    @Override
-    public ArrayList<Recipe> loadInBackground() {
-
-        ArrayList<Recipe> recipes;
-        URL url = NetworkUtils.buildURL();
+        Recipe r = new Recipe();
         try{
-            String jsonString = NetworkUtils.getResponseFromHttpUrl(url);
+            JSONObject recipe = new JSONObject(jsonString);
 
-            recipes = LoadRecipeJsonUtils.loadRecipeArrayFromJsonString(jsonString);
-            return recipes;
-        }catch (IOException e){
-            Log.v(TAG, "Error retrieving json from url: " + url);
-            return null;
-        }
-    }
+            r.setId(recipe.getInt("id"));
+            r.setImage(recipe.getString("image"));
+            r.setName(recipe.getString("name"));
+            r.setServings(recipe.getInt("servings"));
 
-    @Override
-    public void deliverResult(ArrayList<Recipe> data) {
-        mRecipe = data;
-        super.deliverResult(data);
-    }
+            ArrayList<Ingredient> ingredientsArray = new ArrayList<>();
+            JSONArray ingredientsJsonArray = recipe.getJSONArray("ingredients");
 
-    @Override
-    protected void onStopLoading() {
-        cancelLoad();
-    }
-    @Override
-    public void onCanceled(ArrayList<Recipe> data) {
-        super.onCanceled(data);
-    }
+            for(int j = 0; j <ingredientsJsonArray.length(); j++){
+                Ingredient ingredient = new Ingredient();
+                JSONObject iObject = ingredientsJsonArray.getJSONObject(j);
 
-    public String loadJsonFromAsset(Context context){
+                ingredient.setIngredient(iObject.getString("ingredient"));
+                ingredient.setMeasure(iObject.getString("measure"));
+                ingredient.setQuantity(iObject.getInt("quantity"));
+                ingredientsArray.add(ingredient);
+            }
 
-        String json = null;
+            ArrayList<Step> stepsArray = new ArrayList<>();
+            JSONArray stepsJsonArray = recipe.getJSONArray("steps");
 
-        try{
+            for(int k = 0; k< stepsJsonArray.length(); k++){
+                Step step = new Step();
+                JSONObject sObject = stepsJsonArray.getJSONObject(k);
 
-            
-            InputStream is = context.getAssets().open("baking.json");
+                step.setDescription(sObject.getString("description"));
+                step.setId(sObject.getInt("id"));
+                step.setShortDescription(sObject.getString("shortDescription"));
+                step.setThumbnailURL(sObject.getString("thumbnailURL"));
+                step.setVideoURL(sObject.getString("videoURL"));
+                stepsArray.add(step);
 
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-            return json;
+            }
 
-        }catch (IOException ex){
-            Log.v(TAG, "Exception reading from json file: "+ ex);
+            r.setIngredients(ingredientsArray);
+            r.setSteps(stepsArray);
+            return r;
+        }catch(JSONException e){
+            Log.v(TAG, "Error in JSON file: " + e);
             return null;
         }
 
     }
 
 
-    public ArrayList<Recipe> loadJsonFromString(){
+    public static ArrayList<Recipe> loadRecipeArrayFromJsonString(String jsonString){
 
-        String jsonString = loadJsonFromAsset(mContext);
+
         if(jsonString == null) return null;
 
         try{
@@ -162,4 +131,5 @@ public class FetchRecipeDataTask extends AsyncTaskLoader<ArrayList<Recipe>> {
             return null;
         }
     }
+
 }

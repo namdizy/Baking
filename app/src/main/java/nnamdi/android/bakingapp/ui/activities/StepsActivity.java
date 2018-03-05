@@ -1,4 +1,4 @@
-package nnamdi.android.bakingapp;
+package nnamdi.android.bakingapp.ui.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,9 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import butterknife.ButterKnife;
+import nnamdi.android.bakingapp.R;
+import nnamdi.android.bakingapp.ui.fragments.StepsFragment;
 import nnamdi.android.bakingapp.models.Recipe;
 import nnamdi.android.bakingapp.models.Step;
-import nnamdi.android.bakingapp.utils.LoadRecipeData;
+import nnamdi.android.bakingapp.ui.fragments.DetailsFragment;
+import nnamdi.android.bakingapp.ui.fragments.IngredientsFragment;
+import nnamdi.android.bakingapp.utils.LoadRecipeJsonUtils;
 
 
 public class StepsActivity extends AppCompatActivity implements StepsFragment.OnStepsFragmentInteractionListener {
@@ -34,7 +38,7 @@ public class StepsActivity extends AppCompatActivity implements StepsFragment.On
 
         if(recipe == null){
             String recipeJsonString =  pref.getString(RECIPE_PREFERENCE_KEY, null);
-            recipe = new LoadRecipeData().loadRecipeFromSharedPreferences(recipeJsonString);
+            recipe = new LoadRecipeJsonUtils().loadRecipeFromString(recipeJsonString);
         }else {
             Gson gson = new Gson();
             String json = gson.toJson(recipe);
@@ -79,7 +83,6 @@ public class StepsActivity extends AppCompatActivity implements StepsFragment.On
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
             DetailsFragment detailsFragment = new DetailsFragment().newInstance(step);
-            detailsFragment.setContext(this);
             fragmentTransaction
                     .replace(R.id.details_container, detailsFragment)
                     .commit();
