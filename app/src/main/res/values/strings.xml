@@ -5,6 +5,5 @@
     <string name="ingredients_label">Ingredients</string>
     <string name="steps_label">Steps</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_message">OOPS! Looks like you have not internet connection!</string>
 </resources>

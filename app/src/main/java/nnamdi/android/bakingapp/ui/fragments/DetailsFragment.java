@@ -106,6 +106,7 @@ public class DetailsFragment extends Fragment {
 
 
     private void releasePlayer() {
+        mExoPlayer.setPlayWhenReady(false);
         mExoPlayer.stop();
         mExoPlayer.release();
         mExoPlayer = null;

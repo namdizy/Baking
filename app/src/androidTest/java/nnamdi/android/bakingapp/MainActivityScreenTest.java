@@ -1,6 +1,5 @@
 package nnamdi.android.bakingapp;
 
-import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -13,10 +12,7 @@ import nnamdi.android.bakingapp.ui.activities.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
-
-import static org.hamcrest.Matchers.anything;
+import android.support.test.espresso.assertion.ViewAssertions;
 
 /**
  * Created by Nnamdi on 2/21/2018.
@@ -32,8 +28,26 @@ public class MainActivityScreenTest {
     @Test
     public void clickOnListViewItem_OpensStepsActivity(){
 
-        onView(ViewMatchers.withId(R.id.recycler_view_recipe))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withRecyclerView(R.id.recycler_view_recipe).atPosition(0))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        onView(withRecyclerView(R.id.recycler_view_recipe).atPositionOnView(0, R.id.tv_recipe_name))
+                .check(ViewAssertions.matches(ViewMatchers.withText("Nutella Pie")))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        onView(withRecyclerView(R.id.recycler_view_recipe).atPositionOnView(0, R.id.tv_recipe_servings))
+                .check(ViewAssertions.matches(ViewMatchers.withText("8")))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+
+        onView(withRecyclerView(R.id.recycler_view_recipe).atPosition(0))
+                .perform(click());
 
     }
+
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
+    }
+
 }

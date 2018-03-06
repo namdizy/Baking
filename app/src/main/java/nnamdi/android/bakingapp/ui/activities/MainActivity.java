@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -16,14 +18,18 @@ import nnamdi.android.bakingapp.R;
 import nnamdi.android.bakingapp.ui.adapter.RecipeAdapter;
 import nnamdi.android.bakingapp.models.Recipe;
 import nnamdi.android.bakingapp.utils.FetchRecipeDataTask;
+import nnamdi.android.bakingapp.utils.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Recipe>>, RecipeAdapter.RecipeAdapterOnclickHandler {
 
     private RecyclerView.LayoutManager mLayoutManager;
+    private final String TAG = getClass().getName();
 
     private static final int RECIPE_LOADER_ID = 22;
 
     @BindView(R.id.recycler_view_recipe) RecyclerView mRecyclerView;
+    @BindView(R.id.tv_recipe_error_message)
+    TextView mErrorMessage;
 
     private RecipeAdapter mRecipeAdapter;
 
@@ -42,12 +48,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setAdapter(mRecipeAdapter);
 
         getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
+
     }
 
     @Override
     public Loader<ArrayList<Recipe>> onCreateLoader(int i, Bundle bundle){
 
-        return new FetchRecipeDataTask(this);
+        if(NetworkUtils.checkConnection(this)){
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mErrorMessage.setVisibility(View.INVISIBLE);
+            return new FetchRecipeDataTask(this);
+        }
+        else{
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            mErrorMessage.setVisibility(View.VISIBLE);
+            return null;
+        }
     }
 
     @Override

@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     tools:context="nnamdi.android.bakingapp.ui.activities.MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/error_message"
+        android:gravity="center"
+        android:background="@color/colorPrimaryLight"
+        android:visibility="invisible"
+        android:id="@+id/tv_recipe_error_message"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_recipe"
