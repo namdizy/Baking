@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,8 +29,30 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.StepsActivity"
-                android:configChanges="orientation"/>
+                />
         </activity>
+        <service android:name=".BakingWidgetService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="nnamdi.android.bakingapp.bakingwidgetservice.update_app_widget"/>
+                <action android:name="nnamdi.android.bakingapp.bakingwidgetservice.update_app_widget_list"/>
+            </intent-filter>
+        </service>
+
+        <service android:name=".ListViewWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <receiver android:name=".BakingWidgetProvider"
+            android:icon="@drawable/ic_cupcake_image"
+            android:label="@string/widget_description">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/baking_widget_info"/>
+        </receiver>
     </application>
 
 </manifest>

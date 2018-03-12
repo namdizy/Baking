@@ -21,8 +21,8 @@
         android:id="@+id/tv_steps_full_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_marginTop="256dp"
+        android:padding="@dimen/details_description_padding"
+        android:layout_marginTop="@dimen/details_description_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

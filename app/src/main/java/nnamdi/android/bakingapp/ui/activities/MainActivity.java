@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mRecipeAdapter = new RecipeAdapter(this);
+        mRecipeAdapter = new RecipeAdapter(this, this);
         mRecyclerView.setAdapter(mRecipeAdapter);
 
         getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);

@@ -4,6 +4,8 @@
     <string name="main_activity_title">Baking Time</string>
     <string name="ingredients_label">Ingredients</string>
     <string name="steps_label">Steps</string>
-
+    <string name="widget_description">Baking App Widget</string>
     <string name="error_message">OOPS! Looks like you have not internet connection!</string>
+    <string name="empty_view_text">No Recipes</string>
+    <string name="click_text">Click</string>
 </resources>

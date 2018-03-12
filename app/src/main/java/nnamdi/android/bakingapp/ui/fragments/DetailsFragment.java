@@ -1,15 +1,18 @@
 package nnamdi.android.bakingapp.ui.fragments;
 
 import android.content.res.Configuration;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -26,6 +29,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,38 +43,24 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.tv_steps_full_description) TextView mDescriptionTV;
 
     private static final String STEP_ITEM = "step_item";
+    private static final String PLAYER_POSITION = "player_position";
     private Boolean IS_PLAYER_VISIBLE ;
     private SimpleExoPlayer mExoPlayer;
 
+
     private Step mStepItem;
+    private long playerPosition;
+
 
     public DetailsFragment(){
 
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param step Step .
-     * @return A new instance of fragment DetailsFragment.
-     */
-    public static DetailsFragment newInstance(Step step) {
-        DetailsFragment fragment = new DetailsFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(STEP_ITEM, step);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if( getArguments() != null){
-            mStepItem = getArguments().getParcelable(STEP_ITEM);
-        }
+        setRetainInstance(true);
     }
 
     @Override
@@ -80,8 +70,8 @@ public class DetailsFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
 
-        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mDescriptionTV.getLayoutParams();
 
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mDescriptionTV.getLayoutParams();
         mDescriptionTV.setText(mStepItem.getDescription());
         if(mStepItem.getVideoURL().isEmpty()){
             mPlayerView.setVisibility(View.INVISIBLE);
@@ -98,24 +88,27 @@ public class DetailsFragment extends Fragment {
                 params.height=params.MATCH_PARENT;
                 mPlayerView.setLayoutParams(params);
             }
+
             initializePlayer(Uri.parse(mStepItem.getVideoURL()));
             IS_PLAYER_VISIBLE = true;
         }
+
+
         return view;
     }
 
 
     private void releasePlayer() {
-        mExoPlayer.setPlayWhenReady(false);
         mExoPlayer.stop();
         mExoPlayer.release();
         mExoPlayer = null;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
         if(IS_PLAYER_VISIBLE){
+            playerPosition = mExoPlayer.getCurrentPosition();
             releasePlayer();
         }
     }
@@ -138,16 +131,27 @@ public class DetailsFragment extends Fragment {
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(mediaUri);
 
+            mExoPlayer.seekTo(playerPosition);
             mExoPlayer.prepare(videoSource);
             mExoPlayer.setPlayWhenReady(true);
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(STEP_ITEM, mStepItem);
+
+    public Step getmStepItem() {
+        return mStepItem;
     }
 
+    public void setmStepItem(Step mStepItem) {
+        this.mStepItem = mStepItem;
+    }
+
+    public long getPlayerPosition() {
+        return playerPosition;
+    }
+
+    public void setPlayerPosition(long playerPosition) {
+        this.playerPosition = playerPosition;
+    }
 
 }

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 ;
 import butterknife.BindView;
@@ -23,13 +25,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     private ArrayList<Recipe> mRecipe;
     private final RecipeAdapterOnclickHandler mClickHandler;
+    Context mContext;
+
+
 
     public interface RecipeAdapterOnclickHandler{
         void onClick(Recipe recipe);
     }
 
-    public RecipeAdapter(RecipeAdapterOnclickHandler clickHandler){
+    public RecipeAdapter(RecipeAdapterOnclickHandler clickHandler, Context context){
         mClickHandler = clickHandler;
+        mContext = context;
     }
 
     @Override
@@ -51,6 +57,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
         if(image.isEmpty()){
             holder.mImageView.setImageResource(R.drawable.cupcake);
+        }
+        else{
+            Picasso.with(mContext).load(image).into(holder.mImageView);
         }
     }
 

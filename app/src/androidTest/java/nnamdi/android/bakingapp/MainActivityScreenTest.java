@@ -37,7 +37,7 @@ public class MainActivityScreenTest {
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
         onView(withRecyclerView(R.id.recycler_view_recipe).atPositionOnView(0, R.id.tv_recipe_servings))
-                .check(ViewAssertions.matches(ViewMatchers.withText("8")))
+                .check(ViewAssertions.matches(ViewMatchers.withText("Servings: 8")))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
 

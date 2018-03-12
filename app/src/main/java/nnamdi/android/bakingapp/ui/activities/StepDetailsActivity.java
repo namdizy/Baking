@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,7 @@ import nnamdi.android.bakingapp.models.Recipe;
 import nnamdi.android.bakingapp.models.Step;
 import nnamdi.android.bakingapp.ui.fragments.DetailsFragment;
 import nnamdi.android.bakingapp.utils.LoadRecipeJsonUtils;
+
 
 public class StepDetailsActivity extends AppCompatActivity {
 
@@ -35,8 +38,10 @@ public class StepDetailsActivity extends AppCompatActivity {
 
     private final String STEPS_EXTRA = "step";
     private final String RECIPE_PREFERENCE_KEY = "recipe_key";
-
     private final String STEPS_SIZE_KEY = "step_size";
+    private static String TAG_DETAILS_FRAGMENT = "details_fragment";
+
+    private DetailsFragment mDetailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +56,13 @@ public class StepDetailsActivity extends AppCompatActivity {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        DetailsFragment detailsFragment = new DetailsFragment().newInstance(mStep);
-        fragmentTransaction
-                .add(R.id.details_container, detailsFragment)
-                .commit();
+
+        if(savedInstanceState == null){
+            mDetailsFragment = new DetailsFragment();
+            mDetailsFragment.setmStepItem(mStep);
+            mDetailsFragment.setPlayerPosition(0);
+            fragmentTransaction.add(R.id.details_container, mDetailsFragment).commit();
+        }
 
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -70,6 +78,7 @@ public class StepDetailsActivity extends AppCompatActivity {
 
         String recipeJsonString =  pref.getString(RECIPE_PREFERENCE_KEY, null);
         Recipe recipe = new LoadRecipeJsonUtils().loadRecipeFromString(recipeJsonString);
+
         stepsArray = recipe.getSteps();
 
     }

@@ -66,8 +66,6 @@ public class StepsActivity extends AppCompatActivity implements StepsFragment.On
                 .add(R.id.steps_container, stepsFragment)
                 .commit();
 
-
-
         if(findViewById(R.id.details_container) != null){
             TABLET_LAYOUT = true;
         }
@@ -82,7 +80,9 @@ public class StepsActivity extends AppCompatActivity implements StepsFragment.On
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-            DetailsFragment detailsFragment = new DetailsFragment().newInstance(step);
+            DetailsFragment detailsFragment = new DetailsFragment();
+            detailsFragment.setmStepItem(step);
+            detailsFragment.setPlayerPosition(0);
             fragmentTransaction
                     .replace(R.id.details_container, detailsFragment)
                     .commit();
