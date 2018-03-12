@@ -46,7 +46,6 @@ public class StepsFragment extends Fragment implements StepsAdapter.StepsAdapter
      * @param stepArrayList ArrayList of steps.
      * @return A new instance of fragment StepsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public StepsFragment newInstance(ArrayList<Step> stepArrayList) {
         StepsFragment fragment = new StepsFragment();
         Bundle args = new Bundle();
@@ -106,19 +105,7 @@ public class StepsFragment extends Fragment implements StepsAdapter.StepsAdapter
             mListener.onStepFragmentInteraction(step);
         }
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnStepsFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onStepFragmentInteraction(Step step);
     }
 }

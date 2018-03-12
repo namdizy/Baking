@@ -31,7 +31,7 @@
                 android:value=".ui.activities.StepsActivity"
                 />
         </activity>
-        <service android:name=".BakingWidgetService"
+        <service android:name=".ui.widget.BakingWidgetService"
             android:exported="false">
             <intent-filter>
                 <action android:name="nnamdi.android.bakingapp.bakingwidgetservice.update_app_widget"/>
@@ -39,10 +39,10 @@
             </intent-filter>
         </service>
 
-        <service android:name=".ListViewWidgetService"
+        <service android:name=".ui.widget.ListViewWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
-        <receiver android:name=".BakingWidgetProvider"
+        <receiver android:name=".ui.widget.BakingWidgetProvider"
             android:icon="@drawable/ic_cupcake_image"
             android:label="@string/widget_description">
             <intent-filter>

@@ -1,10 +1,14 @@
 package nnamdi.android.bakingapp.ui.fragments;
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -42,8 +46,6 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.playerView) SimpleExoPlayerView mPlayerView;
     @BindView(R.id.tv_steps_full_description) TextView mDescriptionTV;
 
-    private static final String STEP_ITEM = "step_item";
-    private static final String PLAYER_POSITION = "player_position";
     private Boolean IS_PLAYER_VISIBLE ;
     private SimpleExoPlayer mExoPlayer;
 
@@ -93,10 +95,17 @@ public class DetailsFragment extends Fragment {
             IS_PLAYER_VISIBLE = true;
         }
 
-
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(mExoPlayer == null){
+            initializePlayer(Uri.parse(mStepItem.getVideoURL()));
+        }
+    }
 
     private void releasePlayer() {
         mExoPlayer.stop();
@@ -115,6 +124,13 @@ public class DetailsFragment extends Fragment {
 
     public void initializePlayer(Uri mediaUri){
         if(mExoPlayer == null){
+
+            if(!mStepItem.getThumbnailURL().isEmpty()){
+                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mStepItem.getThumbnailURL(), MediaStore.Images.Thumbnails.MINI_KIND);
+
+                BitmapDrawable bitmapDrawable = new BitmapDrawable(thumb);
+                mPlayerView.setBackgroundDrawable(bitmapDrawable);
+            }
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelection.Factory videoTrackSelectionFactory =
                     new AdaptiveTrackSelection.Factory(bandwidthMeter);

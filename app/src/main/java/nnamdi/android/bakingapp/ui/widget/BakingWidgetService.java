@@ -1,4 +1,4 @@
-package nnamdi.android.bakingapp;
+package nnamdi.android.bakingapp.ui.widget;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+
+import nnamdi.android.bakingapp.R;
 
 /**
  * Created by Nnamdi on 3/9/2018.

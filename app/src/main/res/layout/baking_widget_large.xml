@@ -5,19 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/parentView">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/widget_title"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary"
+        android:textSize="@dimen/recipe_card_title_font"
+        android:padding="@dimen/text_padding"
+        android:textColor="@color/colorPrimaryTextLight"
+        />
     <ListView
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="#f0f0f0"
+        android:background="#f0f0f0"
         tools:listitem="@layout/baking_widget_item"
         android:dividerHeight="@dimen/widget_list_divider"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/empty_view"
-        android:layout_gravity="center"
-        android:text="@string/empty_view_text"/>
+
 
 </LinearLayout>

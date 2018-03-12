@@ -1,14 +1,14 @@
-package nnamdi.android.bakingapp;
+package nnamdi.android.bakingapp.ui.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import java.util.ArrayList;
 
+import nnamdi.android.bakingapp.R;
 import nnamdi.android.bakingapp.models.Ingredient;
 import nnamdi.android.bakingapp.models.Recipe;
 import nnamdi.android.bakingapp.utils.LoadRecipeJsonUtils;
@@ -45,6 +45,11 @@ class BakingWidgetListProvider implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public void onDataSetChanged() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String recipeJsonString =  pref.getString(RECIPE_PREFERENCE_KEY, null);
+        Recipe recipe = new LoadRecipeJsonUtils().loadRecipeFromString(recipeJsonString);
+        mIngredientsList = recipe.getIngredients();
+
 
     }
 
@@ -61,11 +66,6 @@ class BakingWidgetListProvider implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public RemoteViews getViewAt(int position) {
-
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String recipeJsonString =  pref.getString(RECIPE_PREFERENCE_KEY, null);
-        Recipe recipe = new LoadRecipeJsonUtils().loadRecipeFromString(recipeJsonString);
-        mIngredientsList = recipe.getIngredients();
 
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.baking_widget_item);
 

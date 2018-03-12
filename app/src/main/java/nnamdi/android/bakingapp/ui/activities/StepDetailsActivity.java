@@ -39,7 +39,6 @@ public class StepDetailsActivity extends AppCompatActivity {
     private final String STEPS_EXTRA = "step";
     private final String RECIPE_PREFERENCE_KEY = "recipe_key";
     private final String STEPS_SIZE_KEY = "step_size";
-    private static String TAG_DETAILS_FRAGMENT = "details_fragment";
 
     private DetailsFragment mDetailsFragment;
 

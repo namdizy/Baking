@@ -1,5 +1,7 @@
 package nnamdi.android.bakingapp.ui.activities;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -15,6 +17,7 @@ import nnamdi.android.bakingapp.models.Recipe;
 import nnamdi.android.bakingapp.models.Step;
 import nnamdi.android.bakingapp.ui.fragments.DetailsFragment;
 import nnamdi.android.bakingapp.ui.fragments.IngredientsFragment;
+import nnamdi.android.bakingapp.ui.widget.BakingWidgetProvider;
 import nnamdi.android.bakingapp.utils.LoadRecipeJsonUtils;
 
 
@@ -70,7 +73,12 @@ public class StepsActivity extends AppCompatActivity implements StepsFragment.On
             TABLET_LAYOUT = true;
         }
 
+        Intent widgetIntent = new Intent(this, BakingWidgetProvider.class);
+        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 
+        int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
+        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(widgetIntent);
     }
 
     @Override
