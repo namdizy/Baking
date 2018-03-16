@@ -2,7 +2,7 @@
 ### For udacity Nano Degree Project 3
 
 
-## Atttributions
+## Attributions
 
 [Expresso recyclerviews][ref-1]
 
